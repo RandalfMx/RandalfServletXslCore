@@ -1,0 +1,90 @@
+Per eseguire il deploy per la pubblicazione e la riusabilitˆ negli altri progetti, basta fare come segue:
+
+Modificare il file pom.xml come segue:
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  .....
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>1.6</maven.compiler.target>
+  </properties>
+  ....
+  <distributionManagement>
+    <repository>
+      <uniqueVersion>false</uniqueVersion>
+      <id>sftp-repository-stable</id>
+      <url>scpexe://maven.bncf.lan/var/www/maven.bncf.lan/repository/release</url>
+      <layout>default</layout>
+    </repository>
+  </distributionManagement>
+  <repositories>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>randalf.mx-release</id>
+      <url>http://maven.bncf.lan/repository/release</url>
+    </repository>
+  </repositories>
+  <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh-external</artifactId>
+        <version>1.0-beta-6</version>
+      </extension>
+    </extensions>
+  </build>
+</project>
+
+Modificare il file settings.xml come segue:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <localRepository>/Users/massi/.m2/repositoryBncf</localRepository>
+
+    <profiles>
+        <profile>
+            <id>randalf.mx</id>
+            <repositories>
+                <repository>
+                    <id>randalf.mx-release</id>
+                    <name>Randalf.mx Repository</name>
+                    <url>http://maven.bncf.lan/repository</url>
+                    <layout>default</layout>
+                    <releases>
+                        <enabled>true</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </snapshots>
+                </repository>
+            </repositories>
+        </profile>
+      </profiles>
+    <servers>
+        <server>
+          <id>sftp-repository-stable</id>
+            <username>massi</username>
+            <privateKey>/Users/massi/.ssh/id_rsa</privateKey>
+            <filePermissions>664</filePermissions>
+            <directoryPermissions>775</directoryPermissions>
+        </server>
+    </servers>
+</settings>
+
+Copiare il certificato sul server maven con:
+
+ssh-copy-id
+
+lanciare il comando
+
+mvn deploy
