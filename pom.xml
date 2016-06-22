@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>mx.randalf.configuration</groupId>
 			<artifactId>RandalfConfiguration</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>mx.randalf.converter.xsl</groupId>
