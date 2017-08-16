@@ -25,13 +25,13 @@ import org.apache.axis.message.MessageElement;
 import org.apache.log4j.Logger;
 
 /**
- * Questa classe viene utilizzata per indcare le operazione Stdandard da utilizzare per i singoli Moduli
+ * Questa classe viene utilizzata per indcare le operazione Stdandard da
+ * utilizzare per i singoli Moduli
  * 
  * @author Massimiliano Randazzo
  *
  */
-public abstract class StdModuliCore
-{
+public abstract class StdModuliCore {
 
 	/**
 	 * Questa variabile viene utilizzata per gestire i nodi del login
@@ -44,22 +44,26 @@ public abstract class StdModuliCore
 	private Logger log = Logger.getLogger(StdModuliCore.class);
 
 	/**
-	 * Questa variabile viene utilizzata per gestire le informazioni provenienti dal Client
+	 * Questa variabile viene utilizzata per gestire le informazioni provenienti
+	 * dal Client
 	 */
 	protected HttpServletRequest request = null;
 
 	/**
-	 * Questa variabile viene utilizzata per gestire il risultato verso il Client
+	 * Questa variabile viene utilizzata per gestire il risultato verso il
+	 * Client
 	 */
 	protected HttpServletResponse response = null;
 
 	/**
-	 * Questa variabile viene utilizzata per indicare il nome del foglio Xsl da utilizzare per la conversione
+	 * Questa variabile viene utilizzata per indicare il nome del foglio Xsl da
+	 * utilizzare per la conversione
 	 */
 	protected String fileXsl = "";
 
 	/**
-	 * Questo metodo viene utilizzato per gestire la creazione del foglio Xml di risposta
+	 * Questo metodo viene utilizzato per gestire la creazione del foglio Xml di
+	 * risposta
 	 */
 	protected DatiXml datiXml = null;
 
@@ -89,35 +93,36 @@ public abstract class StdModuliCore
 	protected String azione = null;
 
 	/**
-	 * Variabile utilizzata per indicare il prefisso nel file di configurazione per le configurazioni relative l'applicativo
+	 * Variabile utilizzata per indicare il prefisso nel file di configurazione
+	 * per le configurazioni relative l'applicativo
 	 */
-	protected  String prefix = null;
+	protected String prefix = null;
 
 	/**
 	 * Costruttore
-	 * @throws ServletException 
+	 * 
+	 * @throws ServletException
 	 */
-	public StdModuliCore(String prefix) throws ServletException
-	{
+	public StdModuliCore(String prefix) throws ServletException {
 		String value = null;
 		String st[] = null;
 
 		try {
-			this.prefix=prefix;
+			this.prefix = prefix;
 			datiXml = new DatiXml(new DatiXmlException());
-			
-			value = Configuration.getValue(prefix+".default.xsl.styleSheet");
-			if (value != null){
+
+			value = Configuration.getValue(prefix + ".default.xsl.styleSheet");
+			if (value != null) {
 				st = value.split(",");
-				for (int x=0; x<st.length; x++){
+				for (int x = 0; x < st.length; x++) {
 					datiXml.addStyleSheet(st[x]);
 				}
 			}
 
-			value = Configuration.getValue(prefix+".default.xsl.javaScript");
-			if (value != null){
+			value = Configuration.getValue(prefix + ".default.xsl.javaScript");
+			if (value != null) {
 				st = value.split(",");
-				for (int x=0; x<st.length; x++){
+				for (int x = 0; x < st.length; x++) {
 					datiXml.addJavaScript(st[x]);
 				}
 			}
@@ -127,24 +132,35 @@ public abstract class StdModuliCore
 		}
 	}
 
+	public void esegui(HttpServletRequest request, HttpServletResponse response, String pathXsl)
+			throws ServletException, IOException {
+		esegui(request, response, pathXsl, null);
+	}
+
 	/**
-	 * Questo metodo viene utilizzato per eseguire le operazioni relative al modulo selezionato
+	 * Questo metodo viene utilizzato per eseguire le operazioni relative al
+	 * modulo selezionato
 	 * 
-	 * @param request Questa variabile viene utilizzata per gestire le informazioni provenienti dal Client
-	 * @param response Questa variabile viene utilizzata per gestire il risultato verso il Client
-	 * @param pathXsl Questa variabile viene utilizzata per indicare la path dove introvare i file Xsl
+	 * @param request
+	 *            Questa variabile viene utilizzata per gestire le informazioni
+	 *            provenienti dal Client
+	 * @param response
+	 *            Questa variabile viene utilizzata per gestire il risultato
+	 *            verso il Client
+	 * @param pathXsl
+	 *            Questa variabile viene utilizzata per indicare la path dove
+	 *            introvare i file Xsl
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	public void esegui(HttpServletRequest request, HttpServletResponse response, String pathXsl, String modulo) throws ServletException, IOException
-	{
-		
+	public void esegui(HttpServletRequest request, HttpServletResponse response, String pathXsl, String modulo)
+			throws ServletException, IOException {
+
 		this.request = request;
 		this.response = response;
 		this.pathXsl = pathXsl;
-		
-		try
-		{
+
+		try {
 			log.debug("init");
 			this.modulo = modulo;
 			init();
@@ -152,160 +168,145 @@ public abstract class StdModuliCore
 				datiXml.getConvert().addChildElement(element, "modulo", modulo, true);
 
 			azione = this.request.getParameter("azione");
-			log.debug("azione: "+azione);
+			log.debug("azione: " + azione);
 			if (this.request.getParameterValues("azione") != null)
-				for(int x=0; x<this.request.getParameterValues("azione").length; x++)
-					log.info("azione: "+this.request.getParameterValues("azione")[x]);
-			
+				for (int x = 0; x < this.request.getParameterValues("azione").length; x++)
+					log.info("azione: " + this.request.getParameterValues("azione")[x]);
+
 			if (azione == null)
 				azione = "show";
-			
-			log.debug("azione - new : "+azione);
-			if (azione.equals("show"))
-			{
+
+			log.debug("azione - new : " + azione);
+			if (azione.equals("show")) {
 				log.debug("show");
 				show();
-			}
-			else if (azione.equals("result"))
-			{
+			} else if (azione.equals("result")) {
 				log.debug("result");
 				result();
-			}
-			else if (azione.equals("edit"))
-			{
+			} else if (azione.equals("edit")) {
 				log.debug("edit");
 				edit();
-			}
-			else if (azione.equals("write"))
-			{
+			} else if (azione.equals("write")) {
 				log.debug("write");
 				write();
 			}
 
 			log.debug("extend");
 			extend();
-		}
-		catch (StdModuliException e)
-		{
+		} catch (StdModuliException e) {
 			log.error(e);
 			this.setSqlErr(e.getMessage());
-		}
-		catch (StdNotificheException e)
-		{
+		} catch (StdNotificheException e) {
 			this.setSqlErr(e.getMessage());
-		}
-		catch (NoClassDefFoundError e)
-		{
+		} catch (NoClassDefFoundError e) {
 			log.error(e);
 			throw new ServletException(e.getMessage());
-		}
-		catch (SOAPException e)
-		{
+		} catch (SOAPException e) {
 			log.error(e);
 			throw new ServletException(e.getMessage());
-		}
-		finally
-		{
+		} finally {
 			endEsegui(pathXsl);
 		}
 	}
 
 	/**
-	 * Questo metodo viene utilizzato per eseguire le attivit?? finali per la visualizzazione del foglio xls
+	 * Questo metodo viene utilizzato per eseguire le attivit?? finali per la
+	 * visualizzazione del foglio xls
 	 * 
-	 * @param pathXsl Path relativo alla posizione del foglio Xsl
-	 * @throws ServletException Eccezione Servlet
+	 * @param pathXsl
+	 *            Path relativo alla posizione del foglio Xsl
+	 * @throws ServletException
+	 *             Eccezione Servlet
 	 */
-	protected void endEsegui(String pathXsl) throws ServletException
-	{
+	protected void endEsegui(String pathXsl) throws ServletException {
 		MessageElement element = null;
-		try
-		{
-			
-			response.setContentType("text/html; charset=UTF-8"); 
-			response.setCharacterEncoding("UTF-8"); 
-			log.debug("msgErr: "+msgErr);
-			if (msgErr!=null)
-			{
+		try {
+
+			response.setContentType("text/html; charset=UTF-8");
+			response.setCharacterEncoding("UTF-8");
+			log.debug("msgErr: " + msgErr);
+			if (msgErr != null) {
 				element = new MessageElement();
 				element.setName("msgErr");
 				datiXml.getConvert().setValue(element, msgErr);
 				datiXml.addElement(element);
 			}
-			log.debug("sqlErr: "+sqlErr);
-			if (sqlErr!=null)
-			{
+			log.debug("sqlErr: " + sqlErr);
+			if (sqlErr != null) {
 				element = new MessageElement();
 				element.setName("sqlErr");
 				datiXml.getConvert().setValue(element, sqlErr);
 				datiXml.addElement(element);
 			}
-			log.debug("convert: "+pathXsl+File.separator+fileXsl);
-			ConverterXsl.convertXsl(pathXsl+File.separator+fileXsl, datiXml.toInputStream(), response.getOutputStream());
-		}
-		catch (ConvertXslException e)
-		{
+			log.debug("convert: " + pathXsl + File.separator + fileXsl);
+			ConverterXsl.convertXsl(pathXsl + File.separator + fileXsl, datiXml.toInputStream(),
+					response.getOutputStream());
+		} catch (ConvertXslException e) {
 			log.error(e);
 			throw new ServletException(e.getMessage());
-		}
-		catch (SOAPException e)
-		{
+		} catch (SOAPException e) {
 			log.error(e);
 			throw new ServletException(e.getMessage());
-		}
-		catch (NoClassDefFoundError e)
-		{
+		} catch (NoClassDefFoundError e) {
 			log.error(e);
 			throw new ServletException(e.getMessage());
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			log.error(e);
 			throw new ServletException(e.getMessage());
 		}
 	}
 
 	/**
-	 * Questo metodo &egrave; da implementare per la inizializzazione della variabili di sistema
-	 * @throws ServletException 
+	 * Questo metodo &egrave; da implementare per la inizializzazione della
+	 * variabili di sistema
+	 * 
+	 * @throws ServletException
 	 */
-	protected void init() throws ServletException{
+	protected void init() throws ServletException {
 		String line = null;
 		String[] st = null;
 
 		try {
-			if (Configuration.getValue(prefix+".modulo."+this.request.getServerName()+"."+modulo,"xsl")!= null){
-				this.fileXsl = Configuration.getValue(prefix+".modulo."+this.request.getServerName()+"."+modulo,"xsl");
+			if (Configuration.getValue(prefix + ".modulo." + this.request.getServerName() + "." + modulo,
+					"xsl") != null) {
+				this.fileXsl = Configuration.getValue(prefix + ".modulo." + this.request.getServerName() + "." + modulo,
+						"xsl");
 			} else {
-				this.fileXsl = Configuration.getValue(prefix+".modulo.ALL."+modulo,"xsl");
+				this.fileXsl = Configuration.getValue(prefix + ".modulo.ALL." + modulo, "xsl");
 			}
 
-			if (Configuration.getValue(prefix+".modulo."+this.request.getServerName()+"."+modulo,"title")!= null){
-				datiXml.setTitle(Configuration.getValue(prefix+".modulo."+this.request.getServerName()+"."+modulo,"title"));
+			if (Configuration.getValue(prefix + ".modulo." + this.request.getServerName() + "." + modulo,
+					"title") != null) {
+				datiXml.setTitle(Configuration
+						.getValue(prefix + ".modulo." + this.request.getServerName() + "." + modulo, "title"));
 			} else {
-				datiXml.setTitle(Configuration.getValue(prefix+".modulo.ALL."+modulo,"title"));
+				datiXml.setTitle(Configuration.getValue(prefix + ".modulo.ALL." + modulo, "title"));
 			}
 
-			if (Configuration.getValue(prefix+".modulo."+this.request.getServerName()+"."+modulo,"styleSheet")!= null){
-				line = Configuration.getValue(prefix+".modulo."+this.request.getServerName()+"."+modulo,"styleSheet");
+			if (Configuration.getValue(prefix + ".modulo." + this.request.getServerName() + "." + modulo,
+					"styleSheet") != null) {
+				line = Configuration.getValue(prefix + ".modulo." + this.request.getServerName() + "." + modulo,
+						"styleSheet");
 			} else {
-				line = Configuration.getValue(prefix+".modulo.ALL."+modulo,"styleSheet");
+				line = Configuration.getValue(prefix + ".modulo.ALL." + modulo, "styleSheet");
 			}
-			if (line != null){
+			if (line != null) {
 				st = line.split(",");
-				for (int x=0; x<st.length; x++){
+				for (int x = 0; x < st.length; x++) {
 					datiXml.addStyleSheet(st[x]);
 				}
 			}
 
-			if (Configuration.getValue(prefix+".modulo."+this.request.getServerName()+"."+modulo,"javaScript")!= null){
-				line = Configuration.getValue(prefix+".modulo."+this.request.getServerName()+"."+modulo,"javaScript");
+			if (Configuration.getValue(prefix + ".modulo." + this.request.getServerName() + "." + modulo,
+					"javaScript") != null) {
+				line = Configuration.getValue(prefix + ".modulo." + this.request.getServerName() + "." + modulo,
+						"javaScript");
 			} else {
-				line = Configuration.getValue(prefix+".modulo.ALL."+modulo,"javaScript");
+				line = Configuration.getValue(prefix + ".modulo.ALL." + modulo, "javaScript");
 			}
-			if (line != null){
+			if (line != null) {
 				st = line.split(",");
-				for (int x=0; x<st.length; x++){
+				for (int x = 0; x < st.length; x++) {
 					datiXml.addJavaScript(st[x]);
 				}
 			}
@@ -319,7 +320,8 @@ public abstract class StdModuliCore
 	}
 
 	/**
-	 * Questo metodo &egrave; da implementare per la gestione delle azoni supplementari del modulo selezionato
+	 * Questo metodo &egrave; da implementare per la gestione delle azoni
+	 * supplementari del modulo selezionato
 	 * 
 	 * @throws ServletException
 	 * @throws IOException
@@ -327,19 +329,18 @@ public abstract class StdModuliCore
 	protected abstract void extend() throws StdNotificheException, StdModuliException, ServletException, IOException;
 
 	/**
-	 * Questo metodo &egrave; da implementare per l'azione show del modulo selezionato
+	 * Questo metodo &egrave; da implementare per l'azione show del modulo
+	 * selezionato
 	 * 
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	protected void show() throws ServletException, IOException
-	{
+	protected void show() throws ServletException, IOException {
 		log.debug("StdModuli - show");
 		show(null);
-		log.debug("SqlErr: "+this.getSqlErr());
-		log.debug("element: "+element);
-		if ((this.getSqlErr() == null || this.getSqlErr().equals("")) && element != null)
-		{
+		log.debug("SqlErr: " + this.getSqlErr());
+		log.debug("element: " + element);
+		if ((this.getSqlErr() == null || this.getSqlErr().equals("")) && element != null) {
 			log.debug("AddElement");
 			datiXml.addElement(element);
 		}
@@ -348,7 +349,8 @@ public abstract class StdModuliCore
 	protected abstract void show(String id) throws ServletException, IOException;
 
 	/**
-	 * Questo metodo &egrave; da implementare per l'azione edit del modulo selezionato
+	 * Questo metodo &egrave; da implementare per l'azione edit del modulo
+	 * selezionato
 	 * 
 	 * @throws ServletException
 	 * @throws IOException
@@ -356,7 +358,8 @@ public abstract class StdModuliCore
 	protected abstract void edit() throws ServletException, IOException;
 
 	/**
-	 * Questo metodo &egrave; da implementare per l'azione result del modulo selezionato
+	 * Questo metodo &egrave; da implementare per l'azione result del modulo
+	 * selezionato
 	 * 
 	 * @throws ServletException
 	 * @throws IOException
@@ -364,7 +367,8 @@ public abstract class StdModuliCore
 	protected abstract void result() throws ServletException, IOException;
 
 	/**
-	 * Questo metodo &egrave; da implementare per l'azione write del modulo selezionato
+	 * Questo metodo &egrave; da implementare per l'azione write del modulo
+	 * selezionato
 	 * 
 	 * @throws ServletException
 	 * @throws IOException
@@ -372,43 +376,45 @@ public abstract class StdModuliCore
 	protected abstract void write() throws ServletException, IOException, StdModuliException, StdNotificheException;
 
 	/**
-	 * Questo metodo viene utilizzato per indicare il messaggio di errore dell'applicazione
+	 * Questo metodo viene utilizzato per indicare il messaggio di errore
+	 * dell'applicazione
 	 * 
-	 * @param msgErr the msgErr to set
+	 * @param msgErr
+	 *            the msgErr to set
 	 */
-	public void setMsgErr(String msgErr)
-	{
+	public void setMsgErr(String msgErr) {
 		this.msgErr = msgErr;
 	}
 
 	/**
-	 * Questo metodo viene utilizzato per indicare il messaggio di errore  sql dell'applicazione
+	 * Questo metodo viene utilizzato per indicare il messaggio di errore sql
+	 * dell'applicazione
 	 * 
-	 * @param msgErr the msgErr to set
+	 * @param msgErr
+	 *            the msgErr to set
 	 */
-	public void setSqlErr(String sqlErr)
-	{
+	public void setSqlErr(String sqlErr) {
 		this.sqlErr = sqlErr;
 	}
 
 	/**
-	 * Questo metodo viene utilizzato per restituire il messqggio di Errore Sql dell'applicazione
+	 * Questo metodo viene utilizzato per restituire il messqggio di Errore Sql
+	 * dell'applicazione
+	 * 
 	 * @return
 	 */
-	public String getSqlErr()
-	{
+	public String getSqlErr() {
 		return sqlErr;
 	}
 
 	/**
 	 * @return the datiXml
 	 */
-	public DatiXml getDatiXml()
-	{
+	public DatiXml getDatiXml() {
 		return datiXml;
 	}
 
-	protected boolean checkUsage(String usage) throws ServletException{
+	protected boolean checkUsage(String usage) throws ServletException {
 		String ipUsage = null;
 		String ipClient = null;
 		String[] ipUsages = null;
@@ -418,30 +424,32 @@ public abstract class StdModuliCore
 		boolean ris2 = false;
 
 		try {
-			if (Configuration.getValue(prefix+".modulo."+this.request.getServerName()+"."+modulo,"usage"+usage)!= null){
-				ipUsage = Configuration.getValue(prefix+".modulo."+this.request.getServerName()+"."+modulo,"usage"+usage);
+			if (Configuration.getValue(prefix + ".modulo." + this.request.getServerName() + "." + modulo,
+					"usage" + usage) != null) {
+				ipUsage = Configuration.getValue(prefix + ".modulo." + this.request.getServerName() + "." + modulo,
+						"usage" + usage);
 			} else {
-				ipUsage = Configuration.getValue(prefix+".modulo.ALL."+modulo,"usage"+usage);
+				ipUsage = Configuration.getValue(prefix + ".modulo.ALL." + modulo, "usage" + usage);
 			}
 
-			if (ipUsage != null){
+			if (ipUsage != null) {
 				ipClient = getClientIpAddr();
 
 				ipClients = ipClient.split("\\.");
 				ipUsages = ipUsage.split(",");
-				for (int i=0; i<ipUsages.length; i++){
+				for (int i = 0; i < ipUsages.length; i++) {
 					ipUsages2 = ipUsages[i].trim().split("\\.");
-					ris2 =  true;
-					for(int x=0; x<ipClients.length; x++){
-						if (x<ipUsages2.length){
-							if (!ipUsages2[x].trim().equals("*")){
-								if (!ipUsages2[x].trim().equalsIgnoreCase(ipClients[x].trim())){
+					ris2 = true;
+					for (int x = 0; x < ipClients.length; x++) {
+						if (x < ipUsages2.length) {
+							if (!ipUsages2[x].trim().equals("*")) {
+								if (!ipUsages2[x].trim().equalsIgnoreCase(ipClients[x].trim())) {
 									ris2 = false;
 								}
 							}
 						}
 					}
-					if (ris2){
+					if (ris2) {
 						ris = true;
 						break;
 					}
@@ -459,23 +467,23 @@ public abstract class StdModuliCore
 	 * 
 	 * @return Indirizzo IP del client
 	 */
-	protected String getClientIpAddr() {  
-        String ip = request.getHeader("X-Forwarded-For");  
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
-            ip = request.getHeader("Proxy-Client-IP");  
-        }  
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
-            ip = request.getHeader("WL-Proxy-Client-IP");  
-        }  
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
-            ip = request.getHeader("HTTP_CLIENT_IP");  
-        }  
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");  
-        }  
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
-            ip = request.getRemoteAddr();  
-        }  
-        return ip;  
-    }  
+	protected String getClientIpAddr() {
+		String ip = request.getHeader("X-Forwarded-For");
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("WL-Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("HTTP_CLIENT_IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getRemoteAddr();
+		}
+		return ip;
+	}
 }
