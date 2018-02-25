@@ -27,11 +27,11 @@ public class DatiXmlException implements IMagException {
 	 */
 	public void add(MagException exc) {
 		if (exc.getTipo().equals(MagException.ERROR))
-			log.error(exc);
+			log.error(exc.getMessage(), exc);
 		else if (exc.getTipo().equals(MagException.FATALERROR))
-			log.error(exc);
+			log.error(exc.getMessage(), exc);
 		else if (exc.getTipo().equals(MagException.WARNING))
-			log.warn(exc.toString());
+			log.warn(exc.getMessage(), exc);
 	}
 
 	/**

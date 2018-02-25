@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mx.randalf.moduli.servlet.core</groupId>
 	<artifactId>RandalfServletXslCore</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.6</maven.compiler.source>
@@ -29,12 +29,12 @@
 		<dependency>
 			<groupId>mx.randalf.converter.xsl</groupId>
 			<artifactId>RandalfConverterXsl</artifactId>
-			<version>1.0.1</version>
+			<version>1.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>mx.randalf.converter.text</groupId>
 			<artifactId>RandalfConverterText</artifactId>
-			<version>1.0.1</version>
+			<version>1.0.2</version>
 		</dependency>
 	</dependencies>
 <!--

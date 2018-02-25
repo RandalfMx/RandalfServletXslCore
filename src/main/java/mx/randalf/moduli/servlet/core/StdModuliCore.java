@@ -127,7 +127,7 @@ public abstract class StdModuliCore {
 				}
 			}
 		} catch (ConfigurationException e) {
-			log.error(e);
+			log.error(e.getMessage(), e);
 			throw new ServletException(e.getMessage(), e);
 		}
 	}
@@ -161,48 +161,48 @@ public abstract class StdModuliCore {
 		this.pathXsl = pathXsl;
 
 		try {
-			log.debug("init");
+			log.debug("\n"+"init");
 			this.modulo = modulo;
 			init();
 			if (modulo != null)
 				datiXml.getConvert().addChildElement(element, "modulo", modulo, true);
 
 			azione = this.request.getParameter("azione");
-			log.debug("azione: " + azione);
+			log.debug("\n"+"azione: " + azione);
 			if (this.request.getParameterValues("azione") != null)
 				for (int x = 0; x < this.request.getParameterValues("azione").length; x++)
-					log.info("azione: " + this.request.getParameterValues("azione")[x]);
+					log.info("\n"+"azione: " + this.request.getParameterValues("azione")[x]);
 
 			if (azione == null)
 				azione = "show";
 
-			log.debug("azione - new : " + azione);
+			log.debug("\n"+"azione - new : " + azione);
 			if (azione.equals("show")) {
-				log.debug("show");
+				log.debug("\n"+"show");
 				show();
 			} else if (azione.equals("result")) {
-				log.debug("result");
+				log.debug("\n"+"result");
 				result();
 			} else if (azione.equals("edit")) {
-				log.debug("edit");
+				log.debug("\n"+"edit");
 				edit();
 			} else if (azione.equals("write")) {
-				log.debug("write");
+				log.debug("\n"+"write");
 				write();
 			}
 
-			log.debug("extend");
+			log.debug("\n"+"extend");
 			extend();
 		} catch (StdModuliException e) {
-			log.error(e);
+			log.error(e.getMessage(), e);
 			this.setSqlErr(e.getMessage());
 		} catch (StdNotificheException e) {
 			this.setSqlErr(e.getMessage());
 		} catch (NoClassDefFoundError e) {
-			log.error(e);
+			log.error(e.getMessage(), e);
 			throw new ServletException(e.getMessage());
 		} catch (SOAPException e) {
-			log.error(e);
+			log.error(e.getMessage(),e);
 			throw new ServletException(e.getMessage());
 		} finally {
 			endEsegui(pathXsl);
@@ -224,34 +224,34 @@ public abstract class StdModuliCore {
 
 			response.setContentType("text/html; charset=UTF-8");
 			response.setCharacterEncoding("UTF-8");
-			log.debug("msgErr: " + msgErr);
+			log.debug("\n"+"msgErr: " + msgErr);
 			if (msgErr != null) {
 				element = new MessageElement();
 				element.setName("msgErr");
 				datiXml.getConvert().setValue(element, msgErr);
 				datiXml.addElement(element);
 			}
-			log.debug("sqlErr: " + sqlErr);
+			log.debug("\n"+"sqlErr: " + sqlErr);
 			if (sqlErr != null) {
 				element = new MessageElement();
 				element.setName("sqlErr");
 				datiXml.getConvert().setValue(element, sqlErr);
 				datiXml.addElement(element);
 			}
-			log.debug("convert: " + pathXsl + File.separator + fileXsl);
+			log.debug("\n"+"convert: " + pathXsl + File.separator + fileXsl);
 			ConverterXsl.convertXsl(pathXsl + File.separator + fileXsl, datiXml.toInputStream(),
 					response.getOutputStream());
 		} catch (ConvertXslException e) {
-			log.error(e);
+			log.error(e.getMessage(), e);
 			throw new ServletException(e.getMessage());
 		} catch (SOAPException e) {
-			log.error(e);
+			log.error(e.getMessage(), e);
 			throw new ServletException(e.getMessage());
 		} catch (NoClassDefFoundError e) {
-			log.error(e);
+			log.error(e.getMessage(), e);
 			throw new ServletException(e.getMessage());
 		} catch (Exception e) {
-			log.error(e);
+			log.error(e.getMessage(), e);
 			throw new ServletException(e.getMessage());
 		}
 	}
@@ -314,7 +314,7 @@ public abstract class StdModuliCore {
 			element = new MessageElement();
 			element.setName(modulo);
 		} catch (ConfigurationException e) {
-			log.error(e);
+			log.error(e.getMessage(), e);
 			throw new ServletException(e.getMessage(), e);
 		}
 	}
@@ -336,12 +336,12 @@ public abstract class StdModuliCore {
 	 * @throws IOException
 	 */
 	protected void show() throws ServletException, IOException {
-		log.debug("StdModuli - show");
+		log.debug("\n"+"StdModuli - show");
 		show(null);
-		log.debug("SqlErr: " + this.getSqlErr());
-		log.debug("element: " + element);
+		log.debug("\n"+"SqlErr: " + this.getSqlErr());
+		log.debug("\n"+"element: " + element);
 		if ((this.getSqlErr() == null || this.getSqlErr().equals("")) && element != null) {
-			log.debug("AddElement");
+			log.debug("\n"+"AddElement");
 			datiXml.addElement(element);
 		}
 	}
@@ -456,7 +456,7 @@ public abstract class StdModuliCore {
 				}
 			}
 		} catch (ConfigurationException e) {
-			log.error(e);
+			log.error(e.getMessage(), e);
 			throw new ServletException(e.getMessage(), e);
 		}
 		return ris;

@@ -159,7 +159,7 @@ public class DatiXml {
 			XMLUtils.DocumentToStream(doc, out);
 			XMLUtils.ElementToStream(document, out);
 		} catch (ParserConfigurationException e) {
-			log.error(e);
+			log.error(e.getMessage(), e);
 		}
 
 	}
@@ -176,7 +176,7 @@ public class DatiXml {
 
 		out = new ByteArrayOutputStream();
 		printOutputStream(out);
-		log.info("Xml Output:\n" + new String(out.toByteArray()) + "\n");
+		log.info("\n"+"Xml Output:\n" + new String(out.toByteArray()) + "\n");
 		if (out != null) {
 			return new ByteArrayInputStream(out.toByteArray());
 		} else {
