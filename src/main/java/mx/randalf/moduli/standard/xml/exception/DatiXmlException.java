@@ -3,10 +3,11 @@
  */
 package mx.randalf.moduli.standard.xml.exception;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import mx.randalf.interfacException.exception.MagException;
 import mx.randalf.interfacException.interfacce.IMagException;
-
-import org.apache.log4j.Logger;
 
 /**
  * @author massi
@@ -14,7 +15,7 @@ import org.apache.log4j.Logger;
  */
 public class DatiXmlException implements IMagException {
 
-	private Logger log = Logger.getLogger(DatiXmlException.class);
+	private Logger log = LogManager.getLogger(DatiXmlException.class);
 
 	/**
 	 * 

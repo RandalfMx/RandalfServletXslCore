@@ -22,7 +22,8 @@ import mx.randalf.moduli.standard.xml.DatiXml;
 import mx.randalf.moduli.standard.xml.exception.DatiXmlException;
 
 import org.apache.axis.message.MessageElement;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Questa classe viene utilizzata per indcare le operazione Stdandard da
@@ -41,7 +42,7 @@ public abstract class StdModuliCore {
 	/**
 	 * Questa variabile viene utilizzata per loggare l'applicazione
 	 */
-	private Logger log = Logger.getLogger(StdModuliCore.class);
+	private Logger log = LogManager.getLogger(StdModuliCore.class);
 
 	/**
 	 * Questa variabile viene utilizzata per gestire le informazioni provenienti

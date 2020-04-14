@@ -18,7 +18,8 @@ import mx.randalf.interfacException.interfacce.IMagException;
 
 import org.apache.axis.message.MessageElement;
 import org.apache.axis.utils.XMLUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 
 /**
@@ -52,7 +53,7 @@ public class DatiXml {
 	/**
 	 * Questa variabile viene utilizzata per loggare l'applicazione
 	 */
-	private Logger log = Logger.getLogger(DatiXml.class);
+	private Logger log = LogManager.getLogger(DatiXml.class);
 
 	/**
 	 * Questa variabile viene utilizzata per la conversione in UTF8
