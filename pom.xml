@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mx.randalf.moduli.servlet.core</groupId>
 	<artifactId>RandalfServletXslCore</artifactId>
-	<version>2.0.0</version>
+	<version>2.0.1</version><!-- 2.0.0 -->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -24,17 +24,17 @@
 		<dependency>
 			<groupId>mx.randalf.configuration</groupId>
 			<artifactId>RandalfConfiguration</artifactId>
-			<version>2.0.0</version>
+			<version>2.0.2</version><!-- 2.0.0 -->
 		</dependency>
 		<dependency>
 			<groupId>mx.randalf.converter.xsl</groupId>
 			<artifactId>RandalfConverterXsl</artifactId>
-			<version>2.0.0</version>
+			<version>2.0.1</version><!-- 2.0.0 -->
 		</dependency>
 		<dependency>
 			<groupId>mx.randalf.converter.text</groupId>
 			<artifactId>RandalfConverterText</artifactId>
-			<version>2.0.0</version>
+			<version>2.0.1</version><!-- 2.0.0 -->
 		</dependency>
 	</dependencies>
 <!--
@@ -55,6 +55,7 @@
 			<url>http://maven.bncf.lan/repository/release</url>
 		</repository>
 	</repositories>
+-->	
 	<build>
 		<extensions>
 			<extension>
@@ -64,7 +65,7 @@
 			</extension>
 		</extensions>
 	</build>
--->
+<!-- 	
   <distributionManagement>
     <repository>
         <id>mvn-bncf</id>
@@ -72,4 +73,6 @@
         <url>http://maven.bncf.firenze.sbn.it/artifactory/libs-release-local</url>
     </repository>
 </distributionManagement>
+-->
+
 </project>
